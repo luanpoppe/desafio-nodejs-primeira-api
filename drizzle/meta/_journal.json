@@ -8,6 +8,13 @@
       "when": 1755268937285,
       "tag": "0000_omniscient_imperial_guard",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1755269328971,
+      "tag": "0001_yielding_tana_nile",
+      "breakpoints": true
     }
   ]
 }
