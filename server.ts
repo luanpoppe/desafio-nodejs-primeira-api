@@ -11,6 +11,7 @@ import fastifySwaggerUi from "@fastify/swagger-ui";
 import { getCoursesRoute } from "./src/routes/get-courses.ts";
 import { getCourseByIdRoute } from "./src/routes/get-course-by-id.ts";
 import { createCourseRoute } from "./src/routes/create-course.ts";
+import scalarAPIReference from "@scalar/fastify-api-reference";
 
 config();
 
@@ -26,19 +27,25 @@ const server = fastify({
   },
 }).withTypeProvider<ZodTypeProvider>();
 
-server.register(fastifySwagger, {
-  openapi: {
-    info: {
-      title: "Desafio NodeJS",
-      version: "1.0.0",
+if (process.env.NODE_ENV === "development") {
+  server.register(fastifySwagger, {
+    openapi: {
+      info: {
+        title: "Desafio NodeJS",
+        version: "1.0.0",
+      },
     },
-  },
-  transform: jsonSchemaTransform,
-});
+    transform: jsonSchemaTransform,
+  });
 
-server.register(fastifySwaggerUi, {
-  routePrefix: "/swagger",
-});
+  server.register(fastifySwaggerUi, {
+    routePrefix: "/swagger",
+  });
+
+  server.register(scalarAPIReference, {
+    routePrefix: "/docs",
+  });
+}
 
 server.setValidatorCompiler(validatorCompiler);
 server.setSerializerCompiler(serializerCompiler);
