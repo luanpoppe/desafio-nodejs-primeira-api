@@ -36,6 +36,13 @@
       "when": 1755615902034,
       "tag": "0004_naive_solo",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1755645225134,
+      "tag": "0005_cloudy_cobalt_man",
+      "breakpoints": true
     }
   ]
 }
