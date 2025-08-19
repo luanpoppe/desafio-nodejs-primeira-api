@@ -15,6 +15,13 @@
       "when": 1755269328971,
       "tag": "0001_yielding_tana_nile",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1755613555466,
+      "tag": "0002_workable_nightmare",
+      "breakpoints": true
     }
   ]
 }
