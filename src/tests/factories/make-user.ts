@@ -1,10 +1,11 @@
 import { faker } from "@faker-js/faker";
 import { db } from "../../database/client";
-import { courses, users } from "../../database/schema";
+import { users } from "../../database/schema";
 import { hash } from "argon2";
 import { randomUUID } from "node:crypto";
+import jwt from "jsonwebtoken";
 
-export async function makeUser() {
+export async function makeUser(role?: "manager" | "student") {
   const passwordBeforeHash = randomUUID();
 
   const result = await db
@@ -13,6 +14,7 @@ export async function makeUser() {
       name: faker.person.fullName(),
       email: faker.internet.email(),
       password: await hash(passwordBeforeHash),
+      role: role ?? "student",
     })
     .returning();
 
@@ -20,4 +22,22 @@ export async function makeUser() {
     user: result[0],
     passwordBeforeHash,
   };
+}
+
+export async function makeAuthenticatedUser(role: "manager" | "student") {
+  const { user } = await makeUser(role);
+
+  if (!process.env.JWT_SECRET) {
+    throw new Error("JWT_SECRET not found");
+  }
+
+  const token = jwt.sign(
+    {
+      sub: user.id,
+      role: user.role,
+    },
+    process.env.JWT_SECRET
+  );
+
+  return { user, token };
 }

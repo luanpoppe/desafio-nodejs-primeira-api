@@ -3,13 +3,17 @@ import request from "supertest";
 import { server } from "../app";
 import { makeCourse } from "../tests/factories/make-course";
 import { randomUUID } from "node:crypto";
+import { makeAuthenticatedUser } from "../tests/factories/make-user";
 
 test("Get course by id", async () => {
   await server.ready();
 
+  const { token } = await makeAuthenticatedUser("student");
   const course = await makeCourse();
 
-  const response = await request(server.server).get(`/courses/${course.id}`);
+  const response = await request(server.server)
+    .get(`/courses/${course.id}`)
+    .set("Authorization", token);
 
   console.log(response.body);
 
@@ -24,7 +28,11 @@ test("Get course by id", async () => {
 test("Return 404 for non existing id", async () => {
   await server.ready();
 
-  const response = await request(server.server).get(`/courses/${randomUUID()}`);
+  const { token } = await makeAuthenticatedUser("student");
+
+  const response = await request(server.server)
+    .get(`/courses/${randomUUID()}`)
+    .set("Authorization", token);
 
   console.log(response.body);
 
